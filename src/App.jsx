@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { closeApp, getAllUserContacts, getUserAvatar, getUserAyobaContacts, getUserCarrier, getUserCountryCode, getUserLanguageCode, getUserLocation, getUserName, getUserPhoneNumber, getUserPresence, getUserSecuredNumber, shareUrl, triggerSetCarrier, triggerSetSecuredNumber } from 'ayoba-microapp-api'
+import { closeApp, getAllUserContacts, getUserAvatar, getUserAyobaContacts, getUserCarrier, getUserCountryCode, getUserLanguageCode, getUserLocation, getUserName, getUserPhoneNumber, getUserPresence, getUserSecuredNumber, shareUrl, startConversation, triggerSetCarrier, triggerSetSecuredNumber } from 'ayoba-microapp-api'
 
 function App() {
 
-  const [userData, setUserData] = useState({ phoneNumber: '', country: '', language: '', ayobaContacts: '', allContacts: '',})
-  const [location, setLocation] = useState({lon: 'null', lat: 'null'})
+  const [userData, setUserData] = useState({ phoneNumber: '', country: '', language: '', ayobaContacts: '', allContacts: '', })
+  const [location, setLocation] = useState({ lon: 'null', lat: 'null' })
   const [presence, setPresence] = useState('null')
   const [name, setName] = useState('null')
   const [avatar, setAvatar] = useState('')
   const [carrier, setCarrier] = useState('')
   const [securedNumber, setSecuredNumber] = useState('')
   const [link, setLink] = useState('')
+  const [conversationNumber, setConversationNumber] = useState('')
 
   getUserLocation(val => setLocation(val), handleErr)
   getUserPresence(val => setPresence(val), handleErr)
@@ -52,7 +53,7 @@ function App() {
   }
 
   function handleErr(err) {
-    console.log('handled Error:',err)
+    console.log('handled Error:', err)
   }
 
 
@@ -85,15 +86,43 @@ function App() {
         <div className="mb-4">
           <label className="form-label fw-bold mb-1 text-primary">Ayoba Contacts</label>
           <p className="fw-light mb-1 small">Gets user's Ayoba regitered contacts</p>
-          <p className={`form-control form-control-sm mb-1 ${userData.ayobaContacts ? 'border-warning' : ''}`} id="contacts" >{userData.ayobaContacts}</p>
+          <select class={`form-select mb-1 ${userData.ayobaContacts ? 'border-warning' : ''}`} aria-label="Default select example">
+            <option defaultValue=''>ayoba contacts</option>
+            {userData.ayobaContacts &&
+              JSON.parse(userData.ayobaContacts).map((contact, index) => {
+                return <option key={index} value={contact.phoneNumber}>{contact.name ? contact.name : contact.phoneNumber}</option>
+              })
+            }
+          </select>
           <button className="btn btn-sm btn-outline-primary w-100" onClick={() => setStateData('ayobaContacts')}>Get Ayoba Contacts</button>
         </div>
         <div className="mb-4">
           <label className="form-label fw-bold mb-1 text-primary">All Contacts</label>
           <p className="fw-light mb-1 small">Gets all user's phone contacts</p>
-          <p className={`form-control form-control-sm mb-1 ${userData.allContacts ? 'border-warning' : ''}`} id="allContacts" >{userData.allContacts}</p>
+          <select class={`form-select mb-1 ${userData.allContacts ? 'border-warning' : ''}`} aria-label="Default select example">
+            <option defaultValue=''>contacts</option>
+            {userData.allContacts &&
+              JSON.parse(userData.allContacts).map((contact, index) => {
+                return <option key={index} value={contact.phoneNumber}>{contact.name ? contact.name : contact.phoneNumber}</option>
+              })
+            }
+          </select>
           <button className="btn btn-sm btn-outline-primary w-100" onClick={() => setStateData('allContacts')}>Get All Contacts</button>
         </div>
+        <div className="mb-4">
+          <label className="form-label fw-bold mb-1 text-primary">Start Conversation</label>
+          <p className="fw-light mb-1 small">Opens chat with an ayoba contact Number</p>
+          <select onChange={(e) =>  setConversationNumber(e.target.value)} class="form-select mb-1" aria-label="Default select example">
+            <option defaultValue=''>select ayoba contact</option>
+            {
+              JSON.parse(getUserAyobaContacts((v) => {return v})).map((contact, index) => {
+                return <option key={index} value={contact.phoneNumber}>{contact.name ? contact.name : contact.phoneNumber}</option>
+              })
+            }
+          </select>
+          <button className="btn btn-sm btn-outline-primary w-100" onClick={() => startConversation(conversationNumber)}>Start conversation</button>
+        </div>
+
         <div className="mb-4">
           <label className="form-label fw-bold mb-1 text-primary">Language</label>
           <p className="fw-light mb-1 small">Gets language code</p>
@@ -117,10 +146,10 @@ function App() {
         <div className="mb-4">
           <label className="form-label fw-bold mb-1 text-primary">Presence</label>
           <p className="fw-light mb-1 small">Gets user's presence live data</p>
-            <div className="d-flex">
-              <label>Presence:</label>
-              <p className="form-control ms-2 w-75 form-control-sm mb-1">{presence}</p>
-            </div>
+          <div className="d-flex">
+            <label>Presence:</label>
+            <p className="form-control ms-2 w-75 form-control-sm mb-1">{presence}</p>
+          </div>
         </div>
         <div className="mb-4">
           <label className="form-label fw-bold mb-1 text-primary">Share Link</label>
