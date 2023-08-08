@@ -3,7 +3,7 @@ import { useEffect, useState } from "preact/hooks";
 import "./style.css";
 import ScoreCard from "./ScoreCard";
 import Header from "./Header";
-import TopThree from "./topThree";
+import TopThree from "./TopThree";
 
 export function App() {
   //query
