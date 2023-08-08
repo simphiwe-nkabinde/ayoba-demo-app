@@ -8,15 +8,13 @@ import TopThree from "./TopThree";
 export function App() {
   //query
   const queryParams = new URLSearchParams(window.location.search)
-  // const gameId = queryParams.get('gameId');
+  const gameId = queryParams.get('gameId');
   const userJid = queryParams.get('jid');
 
   const [loading, setLoading] = useState(false);
   const [scores, setScores] = useState([]);
   const [gameData, setGameData] = useState({});
   const topMax = 10
-
-  const gameId = "55c7b601-7854-444d-839a-c92de2c5d01d";
 
   useEffect(() => {
     setLoading(true);
