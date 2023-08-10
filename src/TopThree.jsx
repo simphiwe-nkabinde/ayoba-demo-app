@@ -25,7 +25,7 @@ export default function TopThree({ scores }) {
                     </div>}
                     <div class='border-blue1 bg-light border rounded-circle bubble'>2</div>
                 </div>
-                <small>{maskIfNumber(second?.playerNickname)}</small>
+                <small>{maskIfNumber(second?.playerNickname).substring(0, 10)}</small>
             </div>}
             {first && <div class='position-relative align-items-center d-flex flex-column'>
                 <div class='position-relative align-items-center d-flex flex-column mb-3'>
@@ -35,7 +35,7 @@ export default function TopThree({ scores }) {
                     </div>}
                     <div class='bg-blue1 text-light rounded-circle bubble'>1</div>
                 </div>
-                <small>{maskIfNumber(first?.playerNickname)}</small>
+                <small>{maskIfNumber(first?.playerNickname).substring(0, 10)}</small>
             </div>}
             {third && <div class='position-relative align-items-center d-flex flex-column'>
                 <div class='position-relative align-items-center d-flex flex-column mb-3'>
@@ -45,7 +45,7 @@ export default function TopThree({ scores }) {
                     </div>}
                     <div class='border-blue1 bg-light border rounded-circle bubble'>3</div>
                 </div>
-                <small>{maskIfNumber(third?.playerNickname)}</small>
+                <small>{maskIfNumber(third?.playerNickname).substring(0, 10)}</small>
             </div>}
         </div>
     )
