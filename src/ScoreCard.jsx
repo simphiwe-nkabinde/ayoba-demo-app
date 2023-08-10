@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ScoreCard({ scoreData, position, color, className }) {
+export default function ScoreCard({ scoreData, position, color, className, isUserScore }) {
 
     const styles = {
         light: { text: 'text-blue2', bg: 'bg-light border-bottom border-blue3', border: 'border-blue2' },
@@ -30,10 +30,10 @@ export default function ScoreCard({ scoreData, position, color, className }) {
             <div class='d-flex'>
                 {scoreData?.avatar && <img class='rounded-circle img-fluid' src={scoreData?.avatar} alt="" />}
                 {!scoreData?.avatar && <div style={{ width: '50px', height: '50px' }} class={`${styles[color].border} d-flex justify-content-center align-items-center border rounded-circle text-uppercase`}>
-                    {scoreData?.nickname[0]}
+                    {scoreData?.playerNickname[0]}
                 </div>}
                 <div class='ms-3'>
-                    <div class='fw-medium'>{maskIfNumber(scoreData?.nickname)}</div>
+                    <div class='fw-medium'>{isUserScore ? 'Your Score' :  maskIfNumber(scoreData?.playerNickname)}</div>
                     <div>{scoreData?.score} points</div>
                 </div>
             </div>
