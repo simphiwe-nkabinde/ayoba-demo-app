@@ -23,7 +23,7 @@ export function App() {
       .then(data => {
         setGameData(data.data[0].attributes);
         setScores(
-          data.data[0].attributes.playerScores.data
+          data.data[0].attributes.playerScores?.data
             .sort((a, b) => b.attributes.score - a.attributes.score))
       })
       .finally(() => { setLoading(false) });
