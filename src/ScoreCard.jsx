@@ -9,35 +9,35 @@ export default function ScoreCard({ scoreData, position, color, className, isUse
     }
 
     function maskIfNumber(str) {
-        let reg = new RegExp("^([\+]?[(]?[0-9]{3})[) ]?[-\s\.]?([0-9]{3}[-\s\. ]?[0-9]{4,6})$")
-        if (reg.exec(str)?.length === 3) {
-            return reg.exec(str)[1] + (reg.exec(str)[2].split("").map((str) => "*").join(""))
-        }
-        else {
-            return str
-        }
+        if (!/^\+\d{10,16}$/.test(str)) return str
+        const code = str.substring(0, 3)
+        const toHide = str.substring(3, 8)
+        const end = str.substring(8)
+        return code + toHide.replace(/[0-9]/g, '*') + end
+    }
+    function isMsisdn(str) {
+        return /^\+\d{10,16}$/.test(str)
     }
 
-    const positionColor = [
-        '',
-        'text-warning',
-        'text-secondary',
-        'text-warning-emphasis'
-    ]
-
     return (
-        <div class={`${styles[color].bg} ${styles[color].text} ${className} py-3 px-2 d-flex align-items-center justify-content-between`}>
-            <div class='d-flex'>
-                {scoreData?.avatar && <img class='rounded-circle img-fluid' src={scoreData?.avatar} alt="" />}
-                {!scoreData?.avatar && <div style={{ width: '50px', height: '50px' }} class={`${styles[color].border} d-flex justify-content-center align-items-center border rounded-circle text-uppercase`}>
-                    {scoreData?.playerNickname[0]}
-                </div>}
+        <div class={`${styles[color].bg} ${styles[color].text} ${className} p-3 d-flex align-items-center justify-content-between`}>
+            <div class='d-flex align-items-center'>
+                {position && <div class='me-4'>{position}</div>}
+                {scoreData?.avatar
+                    ? <img class='rounded-circle img-fluid' src={scoreData?.avatar} alt="" />
+                    : <div style={{ width: '50px', height: '50px' }} class={`${styles[color].border} d-flex justify-content-center align-items-center border rounded-circle text-uppercase`}>
+                        {scoreData?.playerNickname[0]}
+                    </div>
+                }
                 <div class='ms-3'>
-                    <div class='fw-medium'>{isUserScore ? 'Your Score' :  maskIfNumber(scoreData?.playerNickname)}</div>
-                    <div>{scoreData?.score} points</div>
+                    <div class='fw-medium'>
+                        {(!isUserScore && !isMsisdn(scoreData?.playerNickname)) && scoreData?.playerNickname}
+                        {isUserScore && 'Your Score'}
+                    </div>
+                    <div class='small'>{maskIfNumber(scoreData?.msisdn)}</div>
                 </div>
             </div>
-            <div class='me-2'>{position}</div>
+            <div class='text-end'>{scoreData?.score} <span class='small d-block'>points</span></div>
         </div>
     )
 }

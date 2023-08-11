@@ -7,14 +7,13 @@ export default function TopThree({ scores }) {
     const third = length > 2 && scores[2];
 
     function maskIfNumber(str) {
-        let reg = new RegExp("^([\+]?[(]?[0-9]{3})[) ]?[-\s\.]?([0-9]{3}[-\s\. ]?[0-9]{4,6})$")
-        if (reg.exec(str)?.length === 3) {
-            return reg.exec(str)[1] + (reg.exec(str)[2].split("").map((str) => "*").join(""))
-        }
-        else {
-            return str
-        }
+        if (!/^\+\d{10,16}$/.test(str)) return str
+        const code = str.substring(0,3)
+        const toHide = str.substring(3,8)
+        const end = str.substring(8)
+        return  code + toHide.replace(/[0-9]/g, '*') + end
     }
+
     return (
         <div class='d-flex justify-content-evenly align-items-end mb-5'>
             {second &&<div class='align-items-center d-flex flex-column'>
